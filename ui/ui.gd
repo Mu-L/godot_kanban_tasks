@@ -113,6 +113,9 @@ func _ready() -> void:
 	if not DirAccess.dir_exists_absolute(interface.get_editor_paths().get_project_settings_dir()):
 		DirAccess.make_dir_recursive_absolute(interface.get_editor_paths().get_project_settings_dir())
 
+	# HACK: See https://github.com/godotengine/godot/issues/123429
+	ThemeDB.get_default_theme().set_type_variation("PanelContainerButtonGroup", "PanelContainer")
+
 	interface.__base_control = self
 	interface.__editor_main_screen_holder = main_screen_vbox
 	interface.__select_main_screen_callback = editor_select_by_name
