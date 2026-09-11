@@ -35,3 +35,12 @@ func add_menu(menu: PopupMenu) -> void:
 
 func remove_menu(menu: PopupMenu) -> void:
 	pass
+
+func create_dock(title: String, icon: Texture2D, key: String) -> MarginContainer:
+	var res := EditorDock.new()
+	res.title = title
+	res.dock_icon = icon
+	res.layout_key = key
+	res.default_slot = EditorDock.DOCK_SLOT_MAIN_SCREEN
+	res.available_layouts = EditorDock.DOCK_LAYOUT_MAIN_SCREEN | EditorDock.DOCK_LAYOUT_FLOATING
+	return res

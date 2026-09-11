@@ -138,6 +138,20 @@ func remove_menu(menu: PopupMenu) -> void:
 	__get_ui_root().main_menu.remove_child(menu)
 
 
+func create_dock(_title: String, _icon: Texture2D, _key: String) -> MarginContainer:
+	var res := MarginContainer.new()
+	res.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	return res
+
+
+func add_dock(dock: MarginContainer) -> void:
+	get_editor_interface().get_editor_main_screen().add_child(dock)
+
+
+func remove_dock(dock: MarginContainer) -> void:
+	get_editor_interface().get_editor_main_screen().remove_child(dock)
+
+
 ################################################################################
 # Dummy methods
 ################################################################################

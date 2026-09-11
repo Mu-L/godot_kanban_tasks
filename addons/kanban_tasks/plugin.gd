@@ -100,20 +100,17 @@ func _enter_tree() -> void:
 	documentation_dialog = __DocumentationView.instantiate()
 	get_editor_interface().get_base_control().add_child(documentation_dialog)
 
-	main_panel_frame = MarginContainer.new()
+	main_panel_frame = create_dock("Tasks", preload("./icon.svg"), "htk_kanban_tasks")
 	main_panel_frame.add_theme_constant_override(&"margin_top", 5)
 	main_panel_frame.add_theme_constant_override(&"margin_left", 5)
 	main_panel_frame.add_theme_constant_override(&"margin_bottom", 5)
 	main_panel_frame.add_theme_constant_override(&"margin_right", 5)
-	main_panel_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	get_editor_interface().get_editor_main_screen().add_child(main_panel_frame)
+	add_dock(main_panel_frame)
 
 	start_view = __StartView.instantiate()
 	start_view.create_board.connect(__action.bind(ACTION_CREATE))
 	start_view.open_board.connect(__on_start_view_open_board)
 	main_panel_frame.add_child(start_view)
-
-	_make_visible(false)
 
 	await get_tree().create_timer(0.0).timeout
 
@@ -164,6 +161,7 @@ func _exit_tree() -> void:
 	discard_changes_dialog.queue_free()
 	documentation_dialog.queue_free()
 
+	remove_dock(main_panel_frame)
 	main_panel_frame.queue_free()
 	start_view.queue_free()
 
@@ -180,23 +178,6 @@ func _shortcut_input(event: InputEvent) -> void:
 	if not Engine.is_editor_hint() and shortcuts.save_as.matches_event(event):
 		get_viewport().set_input_as_handled()
 		__action(ACTION_SAVE_AS)
-
-
-func _has_main_screen() -> bool:
-	return true
-
-
-func _make_visible(visible) -> void:
-	if main_panel_frame:
-		main_panel_frame.visible = visible
-
-
-func _get_plugin_name() -> String:
-	return "Tasks"
-
-
-func _get_plugin_icon() -> Texture2D:
-	return preload("./icon.svg")
 
 
 func _notification(what: int) -> void:
