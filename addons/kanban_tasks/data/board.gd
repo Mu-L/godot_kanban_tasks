@@ -18,9 +18,9 @@ var layout: __Layout:
 		layout = value
 		layout.changed.connect(__notify_changed)
 
-var __categories: Dictionary
-var __stages: Dictionary
-var __tasks: Dictionary
+var __categories: Dictionary[String, __Category] = {}
+var __stages: Dictionary[String, __Stage] = {}
+var __tasks: Dictionary[String, __Task] = {}
 
 
 ## Generates a json representation of the board.
@@ -33,8 +33,14 @@ func to_json() -> Dictionary:
 	var stage_data := __propagate_uuid_dict(__stages)
 	dict["stages"] = stage_data
 
+	# Removing a task from the board does maintain its data. We drop them when saving.
+	var referenced_tasks := {}
+	for key in __stages:
+		for t in __stages[key].tasks:
+			referenced_tasks[t] = null
+
 	var task_data := __propagate_uuid_dict(__tasks)
-	dict["tasks"] = task_data
+	dict["tasks"] = task_data.filter(func (it): return it["uuid"] in referenced_tasks)
 
 	dict["layout"] = layout.to_json()
 
